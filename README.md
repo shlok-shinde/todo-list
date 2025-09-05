@@ -19,7 +19,7 @@ A simple, modern **To-Do List app** built with **React** and **Tailwind CSS**, f
 - [React](https://react.dev/) – Frontend library
 - [Tailwind CSS](https://tailwindcss.com/) – Styling
 - [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) – Data persistence
-- [Vercel](https://vercel.com/) – Deployment
+- [Github Pages](https://docs.github.com/en/pages) – Deployment
 
 ---
 
