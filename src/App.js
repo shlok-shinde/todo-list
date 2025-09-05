@@ -5,9 +5,8 @@ import TodoInput from "./components/TodoInput";
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem("theme");
-    return saved ? JSON.parse(saved) : "light";
-  })
+    return localStorage.getItem("theme") || "light";
+  });
 
   const [todos, setTodos] = useState(() => {
     const saved = localStorage.getItem("todos");
@@ -27,7 +26,7 @@ export default function App() {
     } else {
       document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("theme", theme);
+    localStorage.setItem("theme", theme); // ✅ store as string
   }, [theme]);
 
 
@@ -93,6 +92,8 @@ export default function App() {
           </button>
         </div>
 
+        <br />
+        
         <TodoList
           todos={filteredTodos ?? todos}
           toggleTodo={toggleTodo}
