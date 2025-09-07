@@ -2,6 +2,8 @@
 
 A modern, **animated To-Do List app** built with **React** and **Tailwind CSS**, featuring:
 - ✅ Add, toggle, and delete tasks with smooth animations
+- 📝 **Detailed descriptions** – Add optional descriptions to tasks
+- ⏰ **Deadline scheduling** – Set due dates with datetime picker
 - 💾 Persistent storage using localStorage
 - 🎚 Filter tasks (All / Active / Completed) with animated transitions
 - 🧹 Clear all or clear completed tasks
@@ -10,6 +12,7 @@ A modern, **animated To-Do List app** built with **React** and **Tailwind CSS**,
 - ✨ **Smooth animations** throughout the entire app
 - 🎯 Enhanced UX with hover effects and visual feedback
 - 🎨 Custom CSS animations combined with Tailwind utilities
+- 📋 **Expandable details** – Show/hide additional input fields
 
 ---
 
@@ -45,6 +48,8 @@ npm start
 - **Todo Deletion**: Elegant slide-out animation with fade
 - **Completion Toggle**: Visual feedback with checkbox scaling and color transitions
 - **Hover Effects**: Subtle lift and shadow effects on interactive elements
+- **Input Expansion**: Smooth expand/collapse animation for description and deadline fields
+- **Form Interactions**: Focus/blur animations with color transitions and border effects
 
 ### 🎨 **Custom CSS Animations**
 - **slideInUp/slideOutDown**: Custom keyframe animations for todo items
