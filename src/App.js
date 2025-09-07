@@ -35,8 +35,15 @@ export default function App() {
   }, [todos]);
 
 
-  const addTodo = (task) => {
-    setTodos([...todos, {id: Date.now(), task, completed: false}]);
+  const addTodo = (task, description = "", deadline = "") => {
+    setTodos([...todos, {
+      id: Date.now(), 
+      task, 
+      description, 
+      deadline, 
+      completed: false,
+      createdAt: new Date().toISOString()
+    }]);
   };
 
   const toggleTodo = (id) => {
