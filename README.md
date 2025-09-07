@@ -23,7 +23,7 @@ A modern, **animated To-Do List app** built with **React** and **Tailwind CSS**,
 - [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework
 - **Custom CSS Animations** – Keyframe animations and transitions
 - [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) – Data persistence
-- [Vercel](https://vercel.com/) – Deployment
+- [Github Pages](https://docs.github.com/en/pages) – Deployment
 
 ---
 
