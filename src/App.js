@@ -59,34 +59,52 @@ export default function App() {
         <TodoInput addTodo={addTodo} />
 
         {/* Filters */}
-        <div className="flex gap-2 mt-4 justify-center">
+        <div className="flex gap-2 mt-4 justify-center animate-fade-in">
           <button
             onClick={() => setFilter("all")}
-            className={`px-3 py-1 rounded-lg ${
-              filter === "all"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-black"
-            }`}
+            className={`
+              px-3 py-1 rounded-lg font-medium
+              transition-all duration-300 ease-in-out
+              transform hover:scale-105 active:scale-95
+              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+              button-press smooth-hover
+              ${filter === "all"
+                ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+              }
+            `}
           >
             All
           </button>
           <button
             onClick={() => setFilter("active")}
-            className={`px-3 py-1 rounded-lg ${
-              filter === "active"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-black"
-            }`}
+            className={`
+              px-3 py-1 rounded-lg font-medium
+              transition-all duration-300 ease-in-out
+              transform hover:scale-105 active:scale-95
+              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+              button-press smooth-hover
+              ${filter === "active"
+                ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+              }
+            `}
           >
             Active
           </button>
           <button 
             onClick={() => setFilter("completed")}
-            className={`px-3 py-1 rounded-lg ${
-              filter === "completed"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-black"
-            }`}
+            className={`
+              px-3 py-1 rounded-lg font-medium
+              transition-all duration-300 ease-in-out
+              transform hover:scale-105 active:scale-95
+              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+              button-press smooth-hover
+              ${filter === "completed"
+                ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+              }
+            `}
           >
             Completed
           </button>
@@ -101,16 +119,24 @@ export default function App() {
         />
 
         {/* Clear buttons */}
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-4 animate-fade-in">
           <button
             onClick={() => setTodos(todos.filter((todo) => !todo.completed))}
-            className="bg-gray-700 hover:bg-gray-800 text-white px-3 py-1 rounded-lg"
+            className="bg-gray-700 hover:bg-gray-800 active:bg-gray-900 text-white px-3 py-1 rounded-lg
+                       transition-all duration-200 ease-in-out
+                       transform hover:scale-105 active:scale-95
+                       focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50
+                       button-press smooth-hover font-medium"
           >
             Clear Completed
           </button>
           <button
             onClick={() => setTodos([])}
-            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg"
+            className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-3 py-1 rounded-lg
+                       transition-all duration-200 ease-in-out
+                       transform hover:scale-105 active:scale-95
+                       focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50
+                       button-press smooth-hover font-medium"
           >
             Clear All
           </button>
@@ -118,9 +144,15 @@ export default function App() {
           {/*Toggle dark mode*/}
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            className="absolute top-4 right-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-1 rounded-lg text-sm transition"
+            className="absolute top-4 right-4 
+                       bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600
+                       text-gray-800 dark:text-gray-100 px-3 py-1 rounded-lg text-sm font-medium
+                       transition-all duration-300 ease-in-out
+                       transform hover:scale-105 active:scale-95 hover:rotate-12
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                       button-press smooth-hover shadow-md hover:shadow-lg"
           >
-            Toggle Theme
+            {theme === "light" ? "🌙" : "☀️"}
           </button>
         </div>
       </div>
