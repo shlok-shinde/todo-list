@@ -60,7 +60,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-lg rounded-2xl p-6">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-lg rounded-2xl p-6 mx-4">
         <h1 className="text-2xl font-bold mb-6 text-center">To-Do List</h1>
 
         <TodoInput addTodo={addTodo} />

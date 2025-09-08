@@ -39,7 +39,8 @@ export default function TodoInput({ addTodo }) {
     <div className="animate-fade-in">
       <form onSubmit={handleSubmit} className="space-y-3">
         {/* Main task input row */}
-        <div className="flex gap-2">
+        <div className="pl-1 pr-2">
+          <div className="flex gap-2">
           <input
             type="text"
             value={task}
@@ -90,13 +91,14 @@ export default function TodoInput({ addTodo }) {
             {isSubmitting ? '✓' : 'Add'}
           </button>
         </div>
+        </div>
 
         {/* Expandable details section */}
         <div className={`
           overflow-hidden transition-all duration-300 ease-in-out
           ${showDetails ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
         `}>
-          <div className="space-y-3 pt-2 pb-4">
+          <div className="space-y-3 pt-2 pb-4 pl-1 pr-2">
             {/* Description input */}
             <textarea
               value={description}
@@ -105,7 +107,7 @@ export default function TodoInput({ addTodo }) {
               onBlur={handleBlur}
               placeholder="Add a description (optional)..."
               rows="2"
-              className="w-[95%] px-3 py-2 rounded-lg border border-gray-300 
+              className="w-full px-2 py-2 rounded-lg border border-gray-300 
                          dark:border-gray-600 
                          bg-white dark:bg-gray-700 
                          text-gray-900 dark:text-gray-100
@@ -113,8 +115,7 @@ export default function TodoInput({ addTodo }) {
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                          transition-all duration-300 ease-in-out
                          hover:shadow-md
-                         smooth-hover resize-none
-                         ml-2"
+                         smooth-hover resize-none"
             />
             
             {/* Deadline input */}
