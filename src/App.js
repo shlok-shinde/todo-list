@@ -54,6 +54,14 @@ export default function App() {
     );
   }
 
+  const editTodo = (id, updatedFields) => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === id ? { ...todo, deadline: updatedFields.deadline || todo.deadline, ...updatedFields } : todo
+      )
+    );
+  }
+
   const deleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   }
@@ -122,6 +130,7 @@ export default function App() {
         <TodoList
           todos={filteredTodos ?? todos}
           toggleTodo={toggleTodo}
+          editTodo={editTodo}
           deleteTodo={deleteTodo}
         />
 

@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
 
-export default function TodoItem({ todo, toggleTodo, deleteTodo }) {
+export default function TodoItem({ todo, toggleTodo, deleteTodo, editTodo }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isNew, setIsNew] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTask, setEditedTask] = useState(todo.task);
+  const [editedDescription, setEditedDescription] = useState(todo.description);
+  const [editedDeadline, setEditedDeadline] = useState(todo.deadline);
 
   useEffect(() => {
-    // Mark as not new after initial render to trigger slide-in animation
     const timer = setTimeout(() => setIsNew(false), 50);
     return () => clearTimeout(timer);
   }, []);
 
   const handleDelete = () => {
     setIsDeleting(true);
-    // Delay actual deletion to allow animation to complete
     setTimeout(() => deleteTodo(todo.id), 300);
   };
 
@@ -23,6 +25,27 @@ export default function TodoItem({ todo, toggleTodo, deleteTodo }) {
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    setIsExpanded(true); // Expand details when editing
+  };
+
+  const handleSaveEdit = () => {
+    editTodo(todo.id, {
+      task: editedTask,
+      description: editedDescription,
+      deadline: editedDeadline
+    });
+    setIsEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditedTask(todo.task);
+    setEditedDescription(todo.description);
+    setEditedDeadline(todo.deadline);
+    setIsEditing(false);
   };
 
   const formatDeadline = (deadline) => {
@@ -80,19 +103,30 @@ export default function TodoItem({ todo, toggleTodo, deleteTodo }) {
                        cursor-pointer"
           />
           <div className="flex-grow">
-            <span
-              onClick={handleToggle}
-              className={`
-                cursor-pointer select-none block
-                transition-all duration-300 ease-in-out
-                ${todo.completed
-                  ? "line-through text-gray-400 dark:text-gray-500 opacity-75"
-                  : "text-gray-800 dark:text-gray-200"
-                }
-              `}
-            >
-              {todo.task}
-            </span>
+            {isEditing ? (
+              <input
+                type="text"
+                value={editedTask}
+                onChange={(e) => setEditedTask(e.target.value)}
+                className="block w-full p-2 text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 
+                           rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                autoFocus
+              />
+            ) : (
+              <span
+                onClick={handleToggle}
+                className={`
+                  cursor-pointer select-none block
+                  transition-all duration-300 ease-in-out
+                  ${todo.completed
+                    ? "line-through text-gray-400 dark:text-gray-500 opacity-75"
+                    : "text-gray-800 dark:text-gray-200"
+                  }
+                `}
+              >
+                {todo.task}
+              </span>
+            )}
             
             {/* Deadline indicator */}
             {deadlineInfo && (
@@ -113,7 +147,7 @@ export default function TodoItem({ todo, toggleTodo, deleteTodo }) {
         </div>
         
         <div className="flex items-center gap-1">
-          {/* Expand button (only show if there are details) */}
+          {/* Expand button */}
           {hasDetails && (
             <button
               onClick={toggleExpanded}
@@ -128,57 +162,132 @@ export default function TodoItem({ todo, toggleTodo, deleteTodo }) {
             </button>
           )}
           
-          {/* Delete button */}
-          <button
-            onClick={handleDelete}
-            className="ml-1 bg-red-500 hover:bg-red-600 active:bg-red-700 
-                       text-white px-3 py-1 rounded-lg 
-                       transition-all duration-200 ease-in-out
-                       transform hover:scale-105 active:scale-95
-                       hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50
-                       button-press"
-            aria-label="Delete todo"
-          >
-            ✕
-          </button>
+          {/* Action buttons */}
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSaveEdit}
+                className="ml-1 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 
+                           text-white px-3 py-1 rounded-lg 
+                           transition-all duration-200 ease-in-out
+                           transform hover:scale-105 active:scale-95
+                           hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                           button-press"
+                aria-label="Save"
+              >
+                ✔️
+              </button>
+              <button
+                onClick={handleCancelEdit}
+                className="ml-1 bg-gray-500 hover:bg-gray-600 active:bg-gray-700 
+                           text-white px-3 py-1 rounded-lg 
+                           transition-all duration-200 ease-in-out
+                           transform hover:scale-105 active:scale-95
+                           hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50
+                           button-press"
+                aria-label="Cancel"
+              >
+                ✕
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleEdit}
+                className="ml-1 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 
+                           text-white px-3 py-1 rounded-lg 
+                           transition-all duration-200 ease-in-out
+                           transform hover:scale-105 active:scale-95
+                           hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                           button-press"
+                aria-label="Edit"
+              >
+                ✎️
+              </button>
+              <button
+                onClick={handleDelete}
+                className="ml-1 bg-red-500 hover:bg-red-600 active:bg-red-700 
+                           text-white px-3 py-1 rounded-lg 
+                           transition-all duration-200 ease-in-out
+                           transform hover:scale-105 active:scale-95
+                           hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50
+                           button-press"
+                aria-label="Delete todo"
+              >
+                ✕
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       {/* Expandable details section */}
-      {hasDetails && (
+      {(hasDetails || isEditing) && (
         <div className={`
           overflow-hidden transition-all duration-300 ease-in-out
           ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
         `}>
           <div className="px-3 pb-3 pt-1 border-t border-gray-200 dark:border-gray-600">
-            {todo.description && (
-              <div className="mb-2">
-                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                  Description:
+            {isEditing ? (
+              <>
+                {/* Deadline editor */}
+                <div className="mb-3">
+                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    Deadline:
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={editedDeadline ? new Date(editedDeadline).toISOString().slice(0, 16) : ''}
+                    onChange={(e) => setEditedDeadline(e.target.value ? new Date(e.target.value).toISOString() : null)}
+                    className="w-full text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded p-2"
+                  />
                 </div>
-                <div className="text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 
-                               rounded p-2 whitespace-pre-wrap">
-                  {todo.description}
+                
+                {/* Description editor */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    Description:
+                  </label>
+                  <textarea
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                    className="w-full text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded p-2"
+                    rows="3"
+                  />
                 </div>
-              </div>
-            )}
-            
-            {todo.deadline && (
-              <div>
-                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                  Full Deadline:
-                </div>
-                <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {new Date(todo.deadline).toLocaleString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
-                </div>
-              </div>
+              </>
+            ) : (
+              <>
+                {todo.description && (
+                  <div className="mb-2">
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      Description:
+                    </div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 
+                                   rounded p-2 whitespace-pre-wrap">
+                      {todo.description}
+                    </div>
+                  </div>
+                )}
+                
+                {todo.deadline && (
+                  <div>
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      Full Deadline:
+                    </div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">
+                      {new Date(todo.deadline).toLocaleString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
