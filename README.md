@@ -19,8 +19,8 @@ A modern, **animated To-Do List app** built with **React**, **Tailwind CSS**, an
 ---
 
 ## 🚀 Live Demo
-[Click here to try it out](https://todo-list-mo7qgz556-shlok-shindes-projects.vercel.app/)
-[Alternate link](https://todo-list-shlok-shindes-projects.vercel.app/)
+[Link 1](https://todo-list-mo7qgz556-shlok-shindes-projects.vercel.app/)
+[Link 2](https://todo-list-shlok-shindes-projects.vercel.app/)
 
 ---
 
