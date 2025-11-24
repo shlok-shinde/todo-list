@@ -19,9 +19,10 @@ connection.once('open', () => {
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/todos', require('./routes/todoRoutes'));
 
-app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
-});
-
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+  });
+}
 
 module.exports = app;

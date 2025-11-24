@@ -43,7 +43,7 @@ export default function App() {
       try {
         if (token) {
         setLoggedIn(true);
-        const res = await axios.get("http://localhost:5000/api/todos", {
+        const res = await axios.get("/api/todos", {
           headers: {
             "x-auth-token": token
           }
@@ -72,7 +72,7 @@ export default function App() {
 
   const addTodo = async (task, description = "", deadline = "") => {
     try {
-      const res = await axios.post("http://localhost:5000/api/todos", {
+      const res = await axios.post("/api/todos", {
         task: task,
         description: description,
         deadline: deadline
@@ -88,7 +88,7 @@ export default function App() {
     const todoToggle = todos.find(todo => todo._id === id);
     const updatedStatus = !todoToggle.completed;
     try {
-      const res = await axios.put(`http://localhost:5000/api/todos/${id}`, {
+      const res = await axios.put(`/api/todos/${id}`, {
         completed: updatedStatus
       }, getConfig());
       setTodos(todos.map(todo => todo._id === id ? res.data : todo));
@@ -109,7 +109,7 @@ export default function App() {
       }
     }
     try {
-      const res = await axios.put(`http://localhost:5000/api/todos/${id}`, updatedFields, getConfig());
+      const res = await axios.put(`/api/todos/${id}`, updatedFields, getConfig());
       setTodos(todos.map(todo => todo._id === id ? res.data : todo));
     } catch (err) {
       console.log(err);
@@ -119,7 +119,7 @@ export default function App() {
 
   const deleteTodo = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/todos/${id}`, getConfig());
+      const res = await axios.delete(`/api/todos/${id}`, getConfig());
       setTodos(todos.filter((todo) => todo._id !== id));
     } catch (err) {
       console.log(err);
@@ -129,7 +129,7 @@ export default function App() {
 
   const clearCompleted = async () => {
     try {
-      await axios.delete("http://localhost:5000/api/todos/completed", getConfig());
+      await axios.delete("/api/todos/completed", getConfig());
       setTodos(todos.filter((todo) => !todo.completed));
     } catch (err) {
       console.error(err);
@@ -140,7 +140,7 @@ export default function App() {
   const clearAll = async () => {
     if (window.confirm("Are you sure you want to delete ALL tasks?")) {
       try {
-        await axios.delete("http://localhost:5000/api/todos/all", getConfig());
+        await axios.delete("/api/todos/all", getConfig());
         setTodos([]);
       } catch (err) {
         console.error(err);
