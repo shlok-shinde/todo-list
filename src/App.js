@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import axios from "axios";
 import TodoList from "./components/TodoList";
 import TodoInput from "./components/TodoInput";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 export default function App() {
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const[newUser, setNewUser] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(token ? true : false);
+
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "light";
   });
 
-  const [todos, setTodos] = useState(() => {
-    const saved = localStorage.getItem("todos");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [todos, setTodos] = useState([]);
 
   const [filter, setFilter] = useState("all");
   const filteredTodos = todos.filter(todo => {
@@ -34,36 +38,143 @@ export default function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  useEffect(() => {
+    const getTodos = async () => {
+      try {
+        if (token) {
+        setLoggedIn(true);
+        const res = await axios.get("http://localhost:5000/api/todos", {
+          headers: {
+            "x-auth-token": token
+          }
+        })
+        setTodos(res.data);
+        } else {
+          setLoggedIn(false);
+          setTodos([]);
+        }
+      } catch (err) {
+        console.log(err);
+        setLoggedIn(false);
+        setTodos([]);
+      }
+    }
+    getTodos();
+  }, [token]);
 
-  const addTodo = (task, description = "", deadline = "") => {
-    setTodos([...todos, {
-      id: Date.now(), 
-      task, 
-      description, 
-      deadline, 
-      completed: false,
-      createdAt: new Date().toISOString()
-    }]);
+  const getConfig = () => {
+    return {
+      headers: {
+        "x-auth-token": token
+      }
+    }
   };
 
-  const toggleTodo = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? {...todo, completed: !todo.completed} : todo
-      )
-    );
+  const addTodo = async (task, description = "", deadline = "") => {
+    try {
+      const res = await axios.post("http://localhost:5000/api/todos", {
+        task: task,
+        description: description,
+        deadline: deadline
+      }, getConfig());
+      setTodos([res.data, ...todos]);
+    } catch (err) {
+      console.log(err);
+      alert("Error adding todo");
+    }
   }
 
-  const editTodo = (id, updatedFields) => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, deadline: updatedFields.deadline || todo.deadline, ...updatedFields } : todo
-      )
-    );
+  const toggleTodo = async (id) => {
+    const todoToggle = todos.find(todo => todo._id === id);
+    const updatedStatus = !todoToggle.completed;
+    try {
+      const res = await axios.put(`http://localhost:5000/api/todos/${id}`, {
+        completed: updatedStatus
+      }, getConfig());
+      setTodos(todos.map(todo => todo._id === id ? res.data : todo));
+    } catch (err) {
+      console.log(err);
+      alert("Error toggling todo");
+    }
   }
 
-  const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const editTodo = async (id, updatedFields) => {
+    if (updatedFields.deadline) {
+      const selectedDate = new Date(updatedFields.deadline);
+      const now = new Date();
+
+      if (selectedDate < now) {
+        alert("You cannot set a deadline in the past!");
+        return; 
+      }
+    }
+    try {
+      const res = await axios.put(`http://localhost:5000/api/todos/${id}`, updatedFields, getConfig());
+      setTodos(todos.map(todo => todo._id === id ? res.data : todo));
+    } catch (err) {
+      console.log(err);
+      alert("Error editing todo");
+    }
+  }
+
+  const deleteTodo = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:5000/api/todos/${id}`, getConfig());
+      setTodos(todos.filter((todo) => todo._id !== id));
+    } catch (err) {
+      console.log(err);
+      alert("Error deleting todo");
+    }
+  } 
+
+  const clearCompleted = async () => {
+    try {
+      await axios.delete("http://localhost:5000/api/todos/completed", getConfig());
+      setTodos(todos.filter((todo) => !todo.completed));
+    } catch (err) {
+      console.error(err);
+      alert("Error clearing completed todos");
+    }
+  };
+
+  const clearAll = async () => {
+    if (window.confirm("Are you sure you want to delete ALL tasks?")) {
+      try {
+        await axios.delete("http://localhost:5000/api/todos/all", getConfig());
+        setTodos([]);
+      } catch (err) {
+        console.error(err);
+        alert("Error clearing all todos");
+      }
+    }
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+    window.location.replace("/");
+  }
+  if (!token) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <div className="w-full max-w-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-lg rounded-2xl p-6 mx-4">
+          <h1 className="text-2xl font-bold mb-6 text-center">
+            {newUser ? "Create Account" : "Welcome Back"}
+          </h1>
+
+          {/* 1. Show Register or Login component based on newUser state */}
+          {newUser ? <Register /> : <Login />}
+           
+          {/* 2. Add a button to toggle newUser state (e.g. "Switch to Login") */}
+          <button
+            onClick={() => setNewUser(!newUser)}
+            className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 button-press smooth-hover"
+          >
+            {newUser ? "Switch to Login" : "Switch to Register"}
+          </button>
+
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -137,7 +248,7 @@ export default function App() {
         {/* Clear buttons */}
         <div className="flex justify-center gap-2 mt-4 animate-fade-in">
           <button
-            onClick={() => setTodos(todos.filter((todo) => !todo.completed))}
+            onClick={clearCompleted}
             className="bg-gray-700 hover:bg-gray-800 active:bg-gray-900 text-white px-3 py-1 rounded-lg
                        transition-all duration-200 ease-in-out
                        transform hover:scale-105 active:scale-95
@@ -147,7 +258,7 @@ export default function App() {
             Clear Completed
           </button>
           <button
-            onClick={() => setTodos([])}
+            onClick={clearAll}
             className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-3 py-1 rounded-lg
                        transition-all duration-200 ease-in-out
                        transform hover:scale-105 active:scale-95
@@ -170,6 +281,19 @@ export default function App() {
           >
             {theme === "light" ? "🌙" : "☀️"}
           </button>
+
+          {/*Logout button*/}
+            <button
+              onClick={handleLogout}
+              className="absolute top-4 right-16
+                        bg-red-600 hover:bg-red-700 active:bg-red text-white px-3 py-1 rounded-lg
+                        transition-all duration-200 ease-in-out
+                        transform hover:scale-105 active:scale-95
+                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50
+                        button-press smooth-hover font-medium"
+            >
+              Logout
+            </button>
         </div>
       </div>
     </div>

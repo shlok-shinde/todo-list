@@ -16,11 +16,11 @@ export default function TodoItem({ todo, toggleTodo, deleteTodo, editTodo }) {
 
   const handleDelete = () => {
     setIsDeleting(true);
-    setTimeout(() => deleteTodo(todo.id), 300);
+    setTimeout(() => deleteTodo(todo._id), 300);
   };
 
   const handleToggle = () => {
-    toggleTodo(todo.id);
+    toggleTodo(todo._id);
   };
 
   const toggleExpanded = () => {
@@ -33,7 +33,7 @@ export default function TodoItem({ todo, toggleTodo, deleteTodo, editTodo }) {
   };
 
   const handleSaveEdit = () => {
-    editTodo(todo.id, {
+    editTodo(todo._id, {
       task: editedTask,
       description: editedDescription,
       deadline: editedDeadline

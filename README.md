@@ -1,10 +1,12 @@
 # 📝 React To-Do List App
 
-A modern, **animated To-Do List app** built with **React** and **Tailwind CSS**, featuring:
+A modern, **animated To-Do List app** built with **React**, **Tailwind CSS**, and a **Node.js backend** with user authentication, featuring:
 - ✅ Add, toggle, and delete tasks with smooth animations
+- ✏️ **Task editing** – Edit task text and deadlines directly
 - 📝 **Detailed descriptions** – Add optional descriptions to tasks
 - ⏰ **Deadline scheduling** – Set due dates with datetime picker
-- 💾 Persistent storage using localStorage
+- 🔒 User authentication with JWT tokens, allowing secure login and registration
+- 💾 Persistent storage using a backend API powered by MongoDB
 - 🎚 Filter tasks (All / Active / Completed) with animated transitions
 - 🧹 Clear all or clear completed tasks
 - 🌙 Dark mode toggle with playful animations (🌙/☀️)
@@ -22,11 +24,19 @@ A modern, **animated To-Do List app** built with **React** and **Tailwind CSS**,
 ---
 
 ## 🛠 Tech Stack
+### Frontend
 - [React](https://react.dev/) – Frontend library with hooks
 - [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework
 - **Custom CSS Animations** – Keyframe animations and transitions
-- [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) – Data persistence
-- [Github Pages](https://docs.github.com/en/pages) – Deployment
+- [Axios](https://axios-http.com/) – HTTP client for API requests
+
+### Backend
+- [Node.js](https://nodejs.org/) and [Express](https://expressjs.com/) – REST API server
+- [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/) – Document database and ODM
+- [JSON Web Tokens (JWT)](https://jwt.io/) – Authentication tokens
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs) – Password hashing
+- [dotenv](https://www.npmjs.com/package/dotenv) – Environment variable management
+- [cors](https://www.npmjs.com/package/cors) – Cross-origin resource sharing
 
 ---
 
@@ -37,14 +47,33 @@ Clone the repo and install dependencies:
 git clone https://github.com/shlok-shinde/todo-list.git
 cd todo-list
 npm install
+```
+
+### Run Backend Server
+
+```bash
+cd server
+npm install
+node server.js
+```
+
+The backend server listens on port 5000 by default.
+
+### Run Frontend App
+
+In a separate terminal window:
+
+```bash
 npm start
 ```
+
 ---
 
 ## ✨ Animation Features
 
 ### 🎯 **Interactive Animations**
 - **Todo Creation**: Smooth slide-in animation from bottom
+- **Todo Editing**: Expandable edit mode with smooth transitions
 - **Todo Deletion**: Elegant slide-out animation with fade
 - **Completion Toggle**: Visual feedback with checkbox scaling and color transitions
 - **Hover Effects**: Subtle lift and shadow effects on interactive elements
@@ -65,9 +94,6 @@ npm start
 ---
 
 ## 🔮 Future Enhancements
-
-- 🔗 **Firebase integration** – real-time sync across devices  
-- 👤 **User authentication** – Google sign-in  
 - 📊 **Analytics dashboard** – task completion statistics
 - 🔔 **Push notifications** – task reminders
 
